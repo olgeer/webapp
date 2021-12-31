@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:webapp/SmartFolder.dart';
+import 'package:webapp/Toast.dart';
 import 'package:webapp/application.dart';
 import 'package:webapp/constants.dart';
 import 'package:webapp/init.dart';
@@ -67,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   late FocusNode webUrlFocusNode;
   late TextEditingController webUrlController;
   late final AppController global;
-  final double statusBarHeight = 25;
+  final double statusBarHeight = 24;
   final double suggestTitleHeight = Application.isTinyDevice ? 16 : 50;
   final double suggestFontSize = Application.isTinyDevice ? 12 : 24;
   final double suggestSpacing = Application.isTinyDevice ? 2 : 8;
@@ -162,10 +163,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         switch (error.errorCode) {
                           case -10:
                             // Navigator.pop(context);
+                            toast("${error.domain} : ${error.description}",context);
                             webviewController.goBack();
                             break;
                           case -6:
                           default:
+                            toast("${error.description}",context);
                             scaffoldKey.currentState?.openDrawer();
                             break;
                         }
@@ -188,11 +191,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               padding: const EdgeInsets.all(0),
               width: Application.screenSize.width - 50,
               color: Colors.white70,
-              child: Column(
+              child: ListView(
                 children: [
-                  Container(
-                    height: statusBarHeight,
-                  ),
+                  // Container(
+                  //   height: statusBarHeight,
+                  // ),
                   Card(
                     child: Container(
                       margin: const EdgeInsets.all(10),
@@ -208,11 +211,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         initiallyExpanded: true,
                         child: Container(
                           alignment: Alignment.centerLeft,
-                          child: const ListTile(
-                            leading: Icon(
-                              LineAwesomeIcons.app_net,
-                              size: 32,
-                            ),
+                          child: ListTile(
+                            leading:
+                                Container(
+                                  height: 32,width: 32,
+                                    child:Image.asset("assets/images/logo.png")),
+                            // Icon(
+                            //   LineAwesomeIcons.app_net,
+                            //   size: 32,
+                            // ),
                             dense: true,
                             title: Text(
                               "网甲套装",
@@ -301,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       alignment: Alignment.center,
                       child: Obx(() {
                         return GradientText(
-                            "网页飞行套装 -- Ver ${global.version} -- Power by Olgeer.",
+                            "网甲套装 -- Ver ${global.version} -- Power by Olgeer.",
                             gradient: licenceTextGradient);
                       })),
                 ],
@@ -319,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (Application.hostHistory.contains(url)) {
       Application.hostHistory.remove(url);
     }
-    if (Application.hostHistory.length > hostHistorySize) {
+    if (Application.hostHistory.length >= hostHistorySize) {
       Application.hostHistory.removeLast();
     }
     Application.hostHistory.insert(0, url);
