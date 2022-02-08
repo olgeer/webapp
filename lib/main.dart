@@ -143,47 +143,50 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             padding: const EdgeInsets.all(0),
             child: Column(
               children: [
-                Container(
-                  height: statusBarHeight,
-                  color: Colors.transparent,
-                ),
+                Application.showTopStateBar
+                    ? Container(
+                        height: statusBarHeight,
+                        color: Colors.transparent,
+                      )
+                    : Container(),
                 Expanded(
-                  child: WebViewX(
-                      height: Application.screenSize.height,
-                      width: Application.screenSize.width,
-                      initialSourceType: SourceType.url,
-                      onWebViewCreated: (controller) {
-                        controller.loadContent(
-                            global.webUrl.value, SourceType.url);
-                        webviewController = controller;
-                      },
-                      onWebResourceError: (error) {
-                        largePrint(
-                            "Url = ${error.failingUrl} Error = [${error.description}, ${error.errorCode}, ${error.errorType}]");
-                        switch (error.errorCode) {
-                          case -10:
-                            // Navigator.pop(context);
-                            toast("${error.domain} : ${error.description}",context);
-                            webviewController.goBack();
-                            break;
-                          case -6:
-                          default:
-                            toast("${error.description}",context);
-                            scaffoldKey.currentState?.openDrawer();
-                            break;
-                        }
-                      },
-                      onPageStarted: (msg) {
-                        logger.fine("onPageStarted HTML:$msg");
-                      },
-                      onPageFinished: (msg) async{
-                        logger.fine("onPageFinished HTML:$msg");
-                        if(msg.compareTo("about:blank")!=0) {
-                          logger.fine("Title:${await webviewController.getTitle()}");
-                        }
-                      },
-                  )
-                ),
+                    child: SingleChildScrollView(
+                        child: WebViewX(
+                  height: Application.screenSize.height,
+                  width: Application.screenSize.width,
+                  initialSourceType: SourceType.url,
+                  onWebViewCreated: (controller) {
+                    controller.loadContent(global.webUrl.value, SourceType.url);
+                    webviewController = controller;
+                  },
+                  onWebResourceError: (error) {
+                    largePrint(
+                        "Url = ${error.failingUrl} Error = [${error.description}, ${error.errorCode}, ${error.errorType}]");
+                    switch (error.errorCode) {
+                      case -10:
+                        // Navigator.pop(context);
+                        toast(
+                            "${error.domain} : ${error.description}", context);
+                        webviewController.goBack();
+                        break;
+                      case -6:
+                      default:
+                        toast("${error.description}", context);
+                        scaffoldKey.currentState?.openDrawer();
+                        break;
+                    }
+                  },
+                  onPageStarted: (msg) {
+                    logger.fine("onPageStarted HTML:$msg");
+                  },
+                  onPageFinished: (msg) async {
+                    logger.fine("onPageFinished HTML:$msg");
+                    if (msg.compareTo("about:blank") != 0) {
+                      logger
+                          .fine("Title:${await webviewController.getTitle()}");
+                    }
+                  },
+                ))),
               ],
             ),
           ),
@@ -212,10 +215,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: ListTile(
-                            leading:
-                                Container(
-                                  height: 32,width: 32,
-                                    child:Image.asset("assets/images/logo.png")),
+                            leading: Container(
+                                height: 32,
+                                width: 32,
+                                child: Image.asset("assets/images/logo.png")),
                             // Icon(
                             //   LineAwesomeIcons.app_net,
                             //   size: 32,
@@ -290,6 +293,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                           ));
                     }).toList(),
                   ),
+                  CheckboxListTile(
+                      title: const Text("标题留白设置"),
+                      subtitle: const Text("关闭则不显示留白，全屏显示页面。"),
+                      value: Application.showTopStateBar,
+                      onChanged: (v) {
+                        setState(() {
+                          Application.showTopStateBar = v ?? false;
+                        });
+                      }),
                   Card(
                       child: Container(
                     alignment: Alignment.bottomCenter,

@@ -16,6 +16,7 @@ class Application {
   static late Map<String, dynamic> deviceInfo;
   static String? onlyCode;
   static bool isTinyDevice = false;
+  static bool showTopStateBar=true;
   static List<String> hostHistory=[];
 
   ///系统屏幕旋转同步开关
