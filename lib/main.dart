@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:base_utility/base_utility.dart' as base;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
@@ -10,7 +11,6 @@ import 'package:webapp/Toast.dart';
 import 'package:webapp/application.dart';
 import 'package:webapp/constants.dart';
 import 'package:webapp/init.dart';
-import 'package:webapp/logger.dart';
 import 'package:webapp/utils.dart';
 import 'package:webviewx/webviewx.dart';
 
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   late WebViewXController webviewController;
   late FocusNode webUrlFocusNode;
   late TextEditingController webUrlController;
-  late final AppController global;
+  late final base.AppController global;
   final double statusBarHeight = 24;
   final double suggestTitleHeight = Application.isTinyDevice ? 16 : 50;
   final double suggestFontSize = Application.isTinyDevice ? 12 : 24;
@@ -94,11 +94,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
     // setRotateMode();
-    global = Get.find();
+    // global = Get.find();
 
     webUrlFocusNode = FocusNode();
     webUrlController = TextEditingController();
-    webUrlController.text = global.webUrl.value;
+    webUrlController.text = Application.webUrl;
   }
 
   @override
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           WidgetsBinding.instance!.window.physicalSize.height /
               Application.devicePixelRatio);
 
-      logger.fine("screenSize:${Application.screenSize}");
+      base.logger.fine("screenSize:${Application.screenSize}");
     });
   }
 
@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   width: Application.screenSize.width,
                   initialSourceType: SourceType.url,
                   onWebViewCreated: (controller) {
-                    controller.loadContent(global.webUrl.value, SourceType.url);
+                    controller.loadContent(Application.webUrl, SourceType.url);
                     webviewController = controller;
                   },
                   onWebResourceError: (error) {
@@ -177,12 +177,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     }
                   },
                   onPageStarted: (msg) {
-                    logger.fine("onPageStarted HTML:$msg");
+                    base.logger.fine("onPageStarted HTML:$msg");
                   },
                   onPageFinished: (msg) async {
-                    logger.fine("onPageFinished HTML:$msg");
+                    base.logger.fine("onPageFinished HTML:$msg");
                     if (msg.compareTo("about:blank") != 0) {
-                      logger
+                      base.logger
                           .fine("Title:${await webviewController.getTitle()}");
                     }
                   },
@@ -300,6 +300,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       onChanged: (v) {
                         setState(() {
                           Application.showTopStateBar = v ?? false;
+                          Application.cache.write(ShowStateBarTag, Application.showTopStateBar);
                         });
                       }),
                   Card(
@@ -330,8 +331,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   void toNewUrl(String url) {
-    logger.info(url);
-    global.webUrl = url.obs;
+    base.logger.info(url);
+    Application.webUrl = url;
     webviewController.loadContent(url, SourceType.url);
     Application.cache.write(WebUrlTag, url);
 

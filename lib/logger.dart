@@ -10,7 +10,7 @@ void initLogger({Level logLevel = Level.FINE,bool showColor=false}) {
   const String colorEnd="{{@end}}";
   const String logNameColor="{{@dark_blue}}";
   Logger.root.level = logLevel;
-  AppController global = Get.find();
+  // AppController global = Get.find();
   Logger.root.onRecord.listen((event) {
     String color = "{{@yellow}}";
     final String colorEnd = "{{@end}}";
@@ -52,7 +52,7 @@ void initLogger({Level logLevel = Level.FINE,bool showColor=false}) {
           "${DateTime.now().toString()} - [${event.loggerName}] - ${event.level.toString()} : ${event.message}");
       }
       // global=Get.find();
-      global.addLog("${DateTime.now().toString()} - [${event.loggerName}] - ${event.level.toString()} : ${event.message}");
+      // global.addLog("${DateTime.now().toString()} - [${event.loggerName}] - ${event.level.toString()} : ${event.message}");
       // log("${DateTime.now().toString()} -- ${event.level.toString()} : ${event.message}",time:DateTime.now(),name: event.loggerName,level: 0);
     }
   });

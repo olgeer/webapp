@@ -18,6 +18,7 @@ class Application {
   static bool isTinyDevice = false;
   static bool showTopStateBar=true;
   static List<String> hostHistory=[];
+  static String webUrl="";
 
   ///系统屏幕旋转同步开关
   static bool canRotate = false;
@@ -43,16 +44,16 @@ class Application {
   static bool appCanUpgrade = false;
 }
 
-class AppController extends GetxController{
-  var webUrl = "".obs;
-  var logs = [].obs;
-  var testMode = false.obs;
-  var version = "未知".obs;
-
-  addLog(String log){
-    if(logs.length>1000)logs.removeAt(0);
-    logs.add(log);
-  }
-  toggleTestMode()=>testMode.toggle();
-  setWebUrl(String _webUrl)=> webUrl=_webUrl.obs;
-}
+// class AppController extends GetxController{
+//   var webUrl = "".obs;
+//   var logs = [].obs;
+//   var testMode = false.obs;
+//   var version = "未知".obs;
+//
+//   addLog(String log){
+//     if(logs.length>1000)logs.removeAt(0);
+//     logs.add(log);
+//   }
+//   toggleTestMode()=>testMode.toggle();
+//   setWebUrl(String _webUrl)=> webUrl=_webUrl.obs;
+// }

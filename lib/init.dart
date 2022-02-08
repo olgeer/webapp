@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:base_utility/base_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,9 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webapp/application.dart';
 import 'package:webapp/constants.dart';
-import 'package:webapp/lamp.dart';
-import 'package:webapp/logger.dart';
-import 'package:webapp/vibrate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 //App启动前预处理
@@ -34,7 +32,8 @@ Future<void> preProcess() async {
   // Application.cache = await SharedPreferences.getInstance();
   Application.cache = GetStorage();
   AppController global = Get.put(AppController());
-  global.setWebUrl(Application.cache.read(WebUrlTag)??"http://olgeer.3322.org:8123");
+  Application.webUrl=Application.cache.read(WebUrlTag)??"http://olgeer.3322.org:14080";
+  Application.showTopStateBar=Application.cache.read(ShowStateBarTag)??false;
 
   initLogger();
 

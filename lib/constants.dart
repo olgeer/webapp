@@ -12,6 +12,7 @@ final int hostHistorySize = 10;
 final String ScreenSizeHeightTag = "ScreenSize.height";
 final String ScreenSizeWidthTag = "ScreenSize.width";
 
+final String ShowStateBarTag = "System.ShowStateBar";
 final String WebUrlTag = "Web.url";
 final String HostHistoryTag = "Web.hostHistory";
 
